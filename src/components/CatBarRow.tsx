@@ -24,8 +24,8 @@ export default function CatBarRow({
         >
           {category.icon}
         </span>
-        <span className="min-w-0 flex-1 truncate text-sm font-medium">{category.name}</span>
-        <span className="tnum shrink-0 text-sm font-semibold">{fmtDin(total)}</span>
+        <span className="min-w-0 flex-1 truncate text-[15px] font-medium">{category.name}</span>
+        <span className="tnum shrink-0 text-[15px] font-semibold">{fmtDin(total)}</span>
       </div>
       <div
         className="ml-[42px] mt-1.5 h-2 overflow-hidden rounded-full"

@@ -134,7 +134,7 @@ export default function History({
       {groups.map(([day, items]) => (
         <div key={day} className="mt-4">
           <div className="flex items-baseline justify-between px-1">
-            <span className="text-[13px] font-semibold">{dayLabel(day)}</span>
+            <span className="text-sm font-semibold">{dayLabel(day)}</span>
             <span className="tnum text-xs" style={{ color: 'var(--ink-3)' }}>
               {fmtDin(totalOf(items))}
             </span>

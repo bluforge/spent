@@ -111,13 +111,13 @@ export default function EntryPage({
             <button
               onClick={() => setAskDelete(true)}
               aria-label="Obriši trošak"
-              className="press flex h-10 w-10 items-center justify-center rounded-full"
+              className="press flex h-11 w-11 items-center justify-center rounded-full"
               style={{
                 background: 'color-mix(in srgb, var(--danger) 15%, transparent)',
                 color: 'var(--danger)',
               }}
             >
-              <Trash2 size={18} />
+              <Trash2 size={20} />
             </button>
           )
         }

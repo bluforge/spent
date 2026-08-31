@@ -13,21 +13,21 @@ export default function MonthSwitcher({
   return (
     <div className="flex items-center gap-2">
       <button
-        className="press flex h-9 w-9 items-center justify-center rounded-full"
+        className="press flex h-11 w-11 items-center justify-center rounded-full"
         style={bg}
         onClick={() => onMonth(addMonths(month, -1))}
         aria-label="Prethodni mesec"
       >
-        <ChevronLeft size={18} />
+        <ChevronLeft size={22} strokeWidth={2.5} />
       </button>
       <button
-        className="press flex h-9 w-9 items-center justify-center rounded-full"
+        className="press flex h-11 w-11 items-center justify-center rounded-full"
         style={{ ...bg, opacity: atNow ? 0.35 : 1 }}
         disabled={atNow}
         onClick={() => onMonth(addMonths(month, 1))}
         aria-label="Sledeći mesec"
       >
-        <ChevronRight size={18} />
+        <ChevronRight size={22} strokeWidth={2.5} />
       </button>
     </div>
   )

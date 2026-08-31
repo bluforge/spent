@@ -36,12 +36,12 @@ export default function TabBar({
                 aria-current={active ? 'page' : undefined}
               >
                 <Icon
-                  size={21}
+                  size={23}
                   strokeWidth={active ? 2.4 : 2}
                   style={{ color: active ? 'var(--accent)' : 'var(--ink-3)' }}
                 />
                 <span
-                  className="text-[10px] font-medium leading-none"
+                  className="text-[11px] font-medium leading-none"
                   style={{ color: active ? 'var(--ink)' : 'var(--ink-3)' }}
                 >
                   {label}
@@ -53,14 +53,14 @@ export default function TabBar({
         <button
           onClick={onAdd}
           aria-label="Dodaj trošak"
-          className="press flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-full"
+          className="press flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-full"
           style={{
             background: 'var(--accent)',
             color: 'var(--on-accent)',
             boxShadow: 'var(--shadow-glass), inset 0 1px 0 rgba(255,255,255,0.25)',
           }}
         >
-          <Plus size={26} strokeWidth={2.6} />
+          <Plus size={28} strokeWidth={2.6} />
         </button>
       </div>
     </div>

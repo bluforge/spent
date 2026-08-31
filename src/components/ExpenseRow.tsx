@@ -24,14 +24,14 @@ export default function ExpenseRow({
         {category?.icon ?? '📦'}
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-medium">{category?.name ?? 'Nepoznato'}</span>
+        <span className="block truncate text-[15px] font-medium">{category?.name ?? 'Nepoznato'}</span>
         {subtitle && (
           <span className="block truncate text-xs" style={{ color: 'var(--ink-3)' }}>
             {subtitle}
           </span>
         )}
       </span>
-      <span className="tnum shrink-0 text-sm font-semibold">{fmtDin(expense.amount)}</span>
+      <span className="tnum shrink-0 text-[15px] font-semibold">{fmtDin(expense.amount)}</span>
     </button>
   )
 }

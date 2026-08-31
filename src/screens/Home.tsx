@@ -87,7 +87,7 @@ export default function Home({
           {yearSuffix}
         </div>
         <div className="mt-1.5 flex items-baseline gap-1.5">
-          <span className="text-[46px] font-bold leading-none tracking-tight">{fmtNum(total)}</span>
+          <span className="text-[48px] font-bold leading-none tracking-tight">{fmtNum(total)}</span>
           <span className="text-xl font-semibold" style={{ color: 'var(--ink-2)' }}>
             din
           </span>
@@ -138,7 +138,7 @@ export default function Home({
           <span className="text-4xl">🌿</span>
           <p className="mt-3 text-sm font-medium">Nema troškova u ovom mesecu</p>
           <p className="mt-1 text-xs" style={{ color: 'var(--ink-3)' }}>
-            Dodaj prvi pomoću zelenog + dugmeta
+            Dodaj prvi pomoću + dugmeta
           </p>
         </section>
       )}
@@ -146,7 +146,7 @@ export default function Home({
       {/* by category */}
       {sums.length > 0 && (
         <section className="card mt-3 p-5">
-          <h2 className="text-[15px] font-semibold">Po kategorijama</h2>
+          <h2 className="text-base font-semibold">Po kategorijama</h2>
           <div className="mt-3.5 space-y-4">
             {sums.map((s) => (
               <CatBarRow key={s.category.id} category={s.category} total={s.total} max={maxCat} />
@@ -158,7 +158,7 @@ export default function Home({
       {/* per-category budgets */}
       {catBudgets.length > 0 && (
         <section className="card mt-3 p-5">
-          <h2 className="text-[15px] font-semibold">Budžeti po kategorijama</h2>
+          <h2 className="text-base font-semibold">Budžeti po kategorijama</h2>
           <div className="mt-3.5 space-y-4">
             {catBudgets.map(({ c, spent }) => {
               const over = spent > (c.budget ?? 0)
@@ -196,7 +196,7 @@ export default function Home({
       {recent.length > 0 && (
         <section className="card mt-3 px-5 py-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-[15px] font-semibold">Nedavno</h2>
+            <h2 className="text-base font-semibold">Nedavno</h2>
             <button
               onClick={onSeeAll}
               className="press text-[13px] font-medium"

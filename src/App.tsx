@@ -22,6 +22,22 @@ export default function App() {
     void navigator.storage?.persist?.()
   }, [])
 
+  useEffect(() => {
+    // iOS standalone (PWA) lays out with a short viewport until the first
+    // scroll, leaving fixed elements floating too high — nudge it settled
+    const nudge = () => {
+      window.scrollTo(0, 1)
+      window.scrollTo(0, 0)
+    }
+    requestAnimationFrame(nudge)
+    const t = window.setTimeout(nudge, 400)
+    window.addEventListener('pageshow', nudge)
+    return () => {
+      window.clearTimeout(t)
+      window.removeEventListener('pageshow', nudge)
+    }
+  }, [])
+
   const showToast = (msg: string) => {
     setToast(msg)
     window.clearTimeout(toastTimer.current)

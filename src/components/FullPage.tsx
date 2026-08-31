@@ -52,10 +52,10 @@ export default function FullPage({
           <button
             onClick={onClose}
             aria-label="Zatvori"
-            className="press flex h-10 w-10 items-center justify-center rounded-full"
+            className="press flex h-11 w-11 items-center justify-center rounded-full"
             style={{ background: 'color-mix(in srgb, var(--ink) 8%, transparent)' }}
           >
-            <X size={19} />
+            <X size={21} />
           </button>
           <div className="flex items-center gap-2">
             {headerRight}
@@ -64,7 +64,7 @@ export default function FullPage({
                 onClick={onSave}
                 disabled={saveDisabled}
                 aria-label="Sačuvaj"
-                className="press flex h-10 w-10 items-center justify-center rounded-full"
+                className="press flex h-11 w-11 items-center justify-center rounded-full"
                 style={{
                   background: saveDisabled
                     ? 'color-mix(in srgb, var(--accent) 22%, transparent)'
@@ -72,7 +72,7 @@ export default function FullPage({
                   color: saveDisabled ? 'var(--ink-3)' : 'var(--on-accent)',
                 }}
               >
-                <Check size={20} strokeWidth={2.8} />
+                <Check size={22} strokeWidth={2.8} />
               </button>
             )}
           </div>

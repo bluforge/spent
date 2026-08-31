@@ -10,8 +10,8 @@
     </radialGradient>
   </defs>
   <rect width="64" height="64" rx="15" fill="url(#g)"/>
-  <rect x="10" y="17" width="44" height="31" rx="9" fill="url(#v)"/>
-  <path d="M10 26.5 h44 v-2.5 a9 9 0 0 0 -4.5 -5 h-35 a9 9 0 0 0 -4.5 5 z" fill="#09090b" opacity="0.16"/>
-  <rect x="37" y="27.5" width="17" height="12" rx="6" fill="#09090b"/>
-  <circle cx="44" cy="33.5" r="3" fill="url(#v)"/>
+  <rect x="15" y="19" width="34" height="27" rx="8" fill="url(#v)"/>
+  <path d="M15 27.5 h34 v-2 a8 8 0 0 0 -4 -4.5 h-26 a8 8 0 0 0 -4 4.5 z" fill="#09090b" opacity="0.15"/>
+  <path d="M49 27.5 h-8.5 a5.25 5.25 0 0 0 0 10.5 H49 z" fill="#09090b"/>
+  <circle cx="41" cy="32.75" r="2.2" fill="url(#v)"/>
 </svg>

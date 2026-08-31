@@ -94,7 +94,7 @@ export default function More({ showToast }: { showToast: (m: string) => void }) 
 
       {/* categories */}
       <section className="card mt-4 px-5 py-4">
-        <h2 className="text-[15px] font-semibold">Kategorije</h2>
+        <h2 className="text-base font-semibold">Kategorije</h2>
         <div className="mt-1">
           {categories.map((c, i) => (
             <button
