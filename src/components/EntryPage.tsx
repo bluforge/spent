@@ -174,7 +174,7 @@ export default function EntryPage({
                       : { background: 'color-mix(in srgb, var(--ink) 5%, transparent)' }
                   }
                 >
-                  <CategoryIcon icon={c.icon} size={22} color={catColor(c.color)} />
+                  <CategoryIcon icon={c.icon} size={26} color={catColor(c.color)} />
                   <span
                     className="w-full truncate text-center text-[10px] font-medium"
                     style={{ color: selected ? 'var(--ink)' : 'var(--ink-2)' }}

@@ -17,14 +17,14 @@ export default function ExpenseRow({
   return (
     <button onClick={onClick} className="press flex w-full items-center gap-3 py-2.5 text-left">
       <span
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
         style={{
           background: `color-mix(in srgb, ${catColor(category?.color ?? 'gray')} 16%, transparent)`,
         }}
       >
         <CategoryIcon
-          icon={category?.icon ?? 'package'}
-          size={18}
+          icon={category?.icon ?? '📦'}
+          size={22}
           color={catColor(category?.color ?? 'gray')}
         />
       </span>

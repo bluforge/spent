@@ -172,12 +172,12 @@ export default function Home({
                 <div key={c.id}>
                   <div className="flex items-center gap-2.5">
                     <span
-                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
                       style={{
                         background: `color-mix(in srgb, ${catColor(c.color)} 16%, transparent)`,
                       }}
                     >
-                      <CategoryIcon icon={c.icon} size={16} color={catColor(c.color)} />
+                      <CategoryIcon icon={c.icon} size={20} color={catColor(c.color)} />
                     </span>
                     <span className="min-w-0 flex-1 truncate text-sm font-medium">{c.name}</span>
                     {over && <TriangleAlert size={14} style={{ color: 'var(--danger)' }} />}
@@ -188,7 +188,7 @@ export default function Home({
                       {fmtNum(spent)} / {fmtNum(c.budget ?? 0)}
                     </span>
                   </div>
-                  <div className="ml-[42px] mt-1.5">
+                  <div className="ml-[46px] mt-1.5">
                     <Meter value={spent} max={c.budget ?? 0} hue={catColor(c.color)} />
                   </div>
                 </div>

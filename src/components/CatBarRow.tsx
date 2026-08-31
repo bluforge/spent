@@ -20,16 +20,16 @@ export default function CatBarRow({
     <div>
       <div className="flex items-center gap-2.5">
         <span
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
           style={{ background: `color-mix(in srgb, ${catColor(category.color)} 16%, transparent)` }}
         >
-          <CategoryIcon icon={category.icon} size={16} color={catColor(category.color)} />
+          <CategoryIcon icon={category.icon} size={20} color={catColor(category.color)} />
         </span>
         <span className="min-w-0 flex-1 truncate text-[15px] font-medium">{category.name}</span>
         <span className="tnum shrink-0 text-[15px] font-semibold">{fmtDin(total)}</span>
       </div>
       <div
-        className="ml-[42px] mt-1.5 h-2 overflow-hidden rounded-full"
+        className="ml-[46px] mt-1.5 h-2 overflow-hidden rounded-full"
         style={{ background: 'color-mix(in srgb, var(--ink) 6%, transparent)' }}
       >
         <div
