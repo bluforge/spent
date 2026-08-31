@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { catColor, COLOR_SLOTS, db, type Category, type ColorSlot } from '../db'
-import { GLYPH_KEYS } from '../lib/glyphs'
+import { GLYPHS, GLYPH_KEYS } from '../lib/glyphs'
 import FullPage from './FullPage'
 import Confirm from './Confirm'
 import CategoryIcon from './CategoryIcon'
@@ -21,6 +21,7 @@ export default function CategoryEditor({
   const [icon, setIcon] = useState('tag')
   const [color, setColor] = useState<ColorSlot>('blue')
   const [budgetStr, setBudgetStr] = useState('')
+  const [customStr, setCustomStr] = useState('')
   const [askDelete, setAskDelete] = useState(false)
 
   const count =
@@ -39,11 +40,13 @@ export default function CategoryEditor({
       setIcon(category.icon)
       setColor(category.color)
       setBudgetStr(category.budget ? String(category.budget) : '')
+      setCustomStr(category.icon in GLYPHS ? '' : category.icon)
     } else {
       setName('')
       setIcon('tag')
       setColor('blue')
       setBudgetStr('')
+      setCustomStr('')
     }
     setAskDelete(false)
   }, [open, category])
@@ -119,7 +122,10 @@ export default function CategoryEditor({
               return (
                 <button
                   key={k}
-                  onClick={() => setIcon(k)}
+                  onClick={() => {
+                    setIcon(k)
+                    setCustomStr('')
+                  }}
                   aria-label={`Ikonica ${k}`}
                   className="press flex h-10 items-center justify-center rounded-xl"
                   style={
@@ -139,6 +145,26 @@ export default function CategoryEditor({
                 </button>
               )
             })}
+          </div>
+          <div className="mt-3 flex items-center gap-2.5">
+            <span className="text-xs font-medium" style={{ color: 'var(--ink-3)' }}>
+              …ili ukucaj svoj emoji:
+            </span>
+            <input
+              value={customStr}
+              onChange={(e) => {
+                const v = e.target.value.slice(0, 12)
+                setCustomStr(v)
+                setIcon(v.trim() || 'tag')
+              }}
+              placeholder="😊"
+              className="h-10 w-16 rounded-xl text-center text-lg outline-none"
+              style={{
+                background: 'color-mix(in srgb, var(--ink) 5%, transparent)',
+                boxShadow: customStr ? `inset 0 0 0 1.5px ${catColor(color)}` : undefined,
+              }}
+              aria-label="Svoj emoji"
+            />
           </div>
         </section>
 
