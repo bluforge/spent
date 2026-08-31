@@ -23,18 +23,22 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    // iOS standalone (PWA) lays out with a short viewport until the first
-    // scroll, leaving fixed elements floating too high — nudge it settled
+    // iOS standalone (PWA) can lay out with a short viewport on launch,
+    // leaving fixed elements floating too high — nudge it until it settles
     const nudge = () => {
       window.scrollTo(0, 1)
       window.scrollTo(0, 0)
     }
     requestAnimationFrame(nudge)
-    const t = window.setTimeout(nudge, 400)
+    const iv = window.setInterval(nudge, 300)
+    const stop = window.setTimeout(() => window.clearInterval(iv), 1800)
     window.addEventListener('pageshow', nudge)
+    window.addEventListener('resize', nudge)
     return () => {
-      window.clearTimeout(t)
+      window.clearInterval(iv)
+      window.clearTimeout(stop)
       window.removeEventListener('pageshow', nudge)
+      window.removeEventListener('resize', nudge)
     }
   }, [])
 
@@ -55,7 +59,7 @@ export default function App() {
   }
 
   return (
-    <div className="mx-auto min-h-dvh w-full max-w-md px-5 pb-[calc(env(safe-area-inset-bottom)+128px)] pt-[calc(env(safe-area-inset-top)+20px)]">
+    <div className="mx-auto min-h-dvh w-full max-w-md px-5 pb-[calc(env(safe-area-inset-bottom)+112px)] pt-[calc(env(safe-area-inset-top)+20px)]">
       {tab === 'home' && (
         <Home month={month} onMonth={setMonth} onEdit={openEdit} onSeeAll={() => setTab('history')} />
       )}

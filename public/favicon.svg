@@ -1,17 +1,41 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="v" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#eaff85"/>
-      <stop offset="1" stop-color="#c6f038"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#31371a"/>
+      <stop offset="0.45" stop-color="#121408"/>
+      <stop offset="1" stop-color="#060606"/>
     </linearGradient>
-    <radialGradient id="g" cx="0.5" cy="0.4" r="0.8">
-      <stop offset="0" stop-color="#26290f"/>
-      <stop offset="1" stop-color="#09090b"/>
+    <radialGradient id="halo" cx="0.5" cy="0.32" r="0.75">
+      <stop offset="0" stop-color="#d4fb4e" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#d4fb4e" stop-opacity="0"/>
     </radialGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4ffa8"/>
+      <stop offset="0.4" stop-color="#dcfc5f"/>
+      <stop offset="1" stop-color="#b5e42a"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.65"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="clasp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#161a08"/>
+      <stop offset="1" stop-color="#0a0b04"/>
+    </linearGradient>
+    <filter id="ds" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="2.4" stdDeviation="2.6" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
   </defs>
-  <rect width="64" height="64" rx="15" fill="url(#g)"/>
-  <rect x="15" y="19" width="34" height="27" rx="8" fill="url(#v)"/>
-  <path d="M15 27.5 h34 v-2 a8 8 0 0 0 -4 -4.5 h-26 a8 8 0 0 0 -4 4.5 z" fill="#09090b" opacity="0.15"/>
-  <path d="M49 27.5 h-8.5 a5.25 5.25 0 0 0 0 10.5 H49 z" fill="#09090b"/>
-  <circle cx="41" cy="32.75" r="2.2" fill="url(#v)"/>
+  <rect width="64" height="64" rx="15" fill="url(#bg)"/>
+  <rect width="64" height="64" rx="15" fill="url(#halo)"/>
+  <g filter="url(#ds)">
+    <rect x="15" y="19" width="34" height="27" rx="8" fill="url(#body)"/>
+  </g>
+  <path d="M15 27.5 h34 v-2 a8 8 0 0 0 -4 -4.5 h-26 a8 8 0 0 0 -4 4.5 z" fill="#0b0d03" opacity="0.15"/>
+  <rect x="15.7" y="19.7" width="32.6" height="25.6" rx="7.3" fill="none" stroke="url(#rim)" stroke-width="1.4"/>
+  <path d="M49 27.5 h-8.5 a5.25 5.25 0 0 0 0 10.5 H49 z" fill="url(#clasp)"/>
+  <path d="M41 28.7 h8" stroke="#ffffff" stroke-opacity="0.14" stroke-width="1" stroke-linecap="round"/>
+  <circle cx="41" cy="32.75" r="2.35" fill="url(#body)"/>
+  <circle cx="40.3" cy="32" r="0.75" fill="#ffffff" opacity="0.85"/>
 </svg>
