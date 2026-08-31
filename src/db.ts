@@ -52,7 +52,7 @@ db.version(1).stores({
 })
 
 // v2: stock emoji icons became monochrome glyph keys (custom emojis stay as-is)
-const EMOJI_TO_GLYPH: Record<string, string> = {
+export const EMOJI_TO_GLYPH: Record<string, string> = {
   '🛒': 'shopping-cart',
   '☕': 'coffee',
   '🚌': 'bus',

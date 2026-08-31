@@ -1,4 +1,4 @@
-import { db, type Category, type Expense, type ColorSlot, COLOR_SLOTS } from '../db'
+import { db, EMOJI_TO_GLYPH, type Category, type Expense, type ColorSlot, COLOR_SLOTS } from '../db'
 import { getSettings, updateSettings } from './settings'
 import { todayStr } from './format'
 
@@ -76,7 +76,8 @@ export async function importJSON(file: File): Promise<{ categories: number; expe
     .map((c, i) => ({
       id: c.id,
       name: c.name,
-      icon: typeof c.icon === 'string' ? c.icon : 'package',
+      // normalizuj standardne emoji-je iz starih backup-a u glifove
+      icon: typeof c.icon === 'string' ? (EMOJI_TO_GLYPH[c.icon] ?? c.icon) : 'package',
       color: isSlot(c.color) ? c.color : 'gray',
       budget: typeof c.budget === 'number' && c.budget > 0 ? c.budget : undefined,
       order: typeof c.order === 'number' ? c.order : i,
