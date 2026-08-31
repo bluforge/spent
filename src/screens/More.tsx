@@ -18,6 +18,7 @@ import { fmtDin, fmtNum } from '../lib/format'
 import { exportCSV, exportJSON, importJSON } from '../lib/backup'
 import { updateSettings, useSettings, type ThemePref } from '../lib/settings'
 import CategoryEditor from '../components/CategoryEditor'
+import CategoryIcon from '../components/CategoryIcon'
 import Confirm from '../components/Confirm'
 import FullPage from '../components/FullPage'
 
@@ -103,10 +104,10 @@ export default function More({ showToast }: { showToast: (m: string) => void }) 
               className={`press flex w-full items-center gap-3 py-2.5 text-left ${i > 0 ? 'hairline-t' : ''}`}
             >
               <span
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-lg"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
                 style={{ background: `color-mix(in srgb, ${catColor(c.color)} 16%, transparent)` }}
               >
-                {c.icon}
+                <CategoryIcon icon={c.icon} size={18} color={catColor(c.color)} />
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-medium">{c.name}</span>

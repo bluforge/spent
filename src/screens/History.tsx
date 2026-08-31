@@ -1,6 +1,7 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { Search } from 'lucide-react'
+import { CalendarDays, Search } from 'lucide-react'
+import CategoryIcon from '../components/CategoryIcon'
 import { catColor, db, type Expense } from '../db'
 import { dayLabel, fmtDin, monthLabel, type Month } from '../lib/format'
 import { expensesInMonth, groupByDay, totalOf } from '../lib/queries'
@@ -110,14 +111,22 @@ export default function History({
             tint={catColor(c.color)}
             onClick={() => setCatFilter(catFilter === c.id ? null : c.id)}
           >
-            {c.icon} {c.name}
+            <span className="flex items-center gap-1.5">
+              <CategoryIcon icon={c.icon} size={14} color={catColor(c.color)} />
+              {c.name}
+            </span>
           </Chip>
         ))}
       </div>
 
       {loaded && list.length === 0 && (
         <section className="card mt-4 flex flex-col items-center px-5 py-12 text-center">
-          <span className="text-4xl">🗓️</span>
+          <span
+            className="flex h-14 w-14 items-center justify-center rounded-full"
+            style={{ background: 'color-mix(in srgb, var(--accent) 12%, transparent)' }}
+          >
+            <CalendarDays size={26} style={{ color: 'var(--accent)' }} />
+          </span>
           <p className="mt-3 text-sm font-medium">Nema troškova u ovom mesecu</p>
         </section>
       )}

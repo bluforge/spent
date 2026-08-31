@@ -1,5 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { TrendingDown, TrendingUp, TriangleAlert } from 'lucide-react'
+import { Leaf, TrendingDown, TrendingUp, TriangleAlert } from 'lucide-react'
+import CategoryIcon from '../components/CategoryIcon'
 import { catColor, db, type Expense } from '../db'
 import {
   addMonths,
@@ -135,7 +136,12 @@ export default function Home({
       {/* empty month */}
       {loaded && list.length === 0 && (
         <section className="card mt-3 flex flex-col items-center px-5 py-12 text-center">
-          <span className="text-4xl">🌿</span>
+          <span
+            className="flex h-14 w-14 items-center justify-center rounded-full"
+            style={{ background: 'color-mix(in srgb, var(--accent) 12%, transparent)' }}
+          >
+            <Leaf size={26} style={{ color: 'var(--accent)' }} />
+          </span>
           <p className="mt-3 text-sm font-medium">Nema troškova u ovom mesecu</p>
           <p className="mt-1 text-xs" style={{ color: 'var(--ink-3)' }}>
             Dodaj prvi pomoću + dugmeta
@@ -166,12 +172,12 @@ export default function Home({
                 <div key={c.id}>
                   <div className="flex items-center gap-2.5">
                     <span
-                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-base"
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl"
                       style={{
                         background: `color-mix(in srgb, ${catColor(c.color)} 16%, transparent)`,
                       }}
                     >
-                      {c.icon}
+                      <CategoryIcon icon={c.icon} size={16} color={catColor(c.color)} />
                     </span>
                     <span className="min-w-0 flex-1 truncate text-sm font-medium">{c.name}</span>
                     {over && <TriangleAlert size={14} style={{ color: 'var(--danger)' }} />}

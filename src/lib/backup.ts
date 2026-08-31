@@ -76,7 +76,7 @@ export async function importJSON(file: File): Promise<{ categories: number; expe
     .map((c, i) => ({
       id: c.id,
       name: c.name,
-      icon: typeof c.icon === 'string' ? c.icon : '📦',
+      icon: typeof c.icon === 'string' ? c.icon : 'package',
       color: isSlot(c.color) ? c.color : 'gray',
       budget: typeof c.budget === 'number' && c.budget > 0 ? c.budget : undefined,
       order: typeof c.order === 'number' ? c.order : i,

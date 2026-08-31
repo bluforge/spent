@@ -5,6 +5,7 @@ import { db, catColor, type Expense } from '../db'
 import { fmtNum, fullDateLabel, todayStr, toYMD } from '../lib/format'
 import FullPage from './FullPage'
 import Confirm from './Confirm'
+import CategoryIcon from './CategoryIcon'
 
 const LAST_CAT_KEY = 'spent-last-cat'
 
@@ -173,7 +174,7 @@ export default function EntryPage({
                       : { background: 'color-mix(in srgb, var(--ink) 5%, transparent)' }
                   }
                 >
-                  <span className="text-[22px] leading-none">{c.icon}</span>
+                  <CategoryIcon icon={c.icon} size={22} color={catColor(c.color)} />
                   <span
                     className="w-full truncate text-center text-[10px] font-medium"
                     style={{ color: selected ? 'var(--ink)' : 'var(--ink-2)' }}

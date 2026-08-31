@@ -1,5 +1,6 @@
 import { catColor, type Category } from '../db'
 import { fmtDin } from '../lib/format'
+import CategoryIcon from './CategoryIcon'
 
 /**
  * Category breakdown row: icon, name, amount + thin bar.
@@ -19,10 +20,10 @@ export default function CatBarRow({
     <div>
       <div className="flex items-center gap-2.5">
         <span
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-base"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl"
           style={{ background: `color-mix(in srgb, ${catColor(category.color)} 16%, transparent)` }}
         >
-          {category.icon}
+          <CategoryIcon icon={category.icon} size={16} color={catColor(category.color)} />
         </span>
         <span className="min-w-0 flex-1 truncate text-[15px] font-medium">{category.name}</span>
         <span className="tnum shrink-0 text-[15px] font-semibold">{fmtDin(total)}</span>

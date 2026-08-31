@@ -1,4 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks'
+import { ChartColumn } from 'lucide-react'
 import { db } from '../db'
 import {
   addMonths,
@@ -94,7 +95,12 @@ export default function Stats() {
 
       {empty ? (
         <section className="card mt-4 flex flex-col items-center px-5 py-12 text-center">
-          <span className="text-4xl">📊</span>
+          <span
+            className="flex h-14 w-14 items-center justify-center rounded-full"
+            style={{ background: 'color-mix(in srgb, var(--accent) 12%, transparent)' }}
+          >
+            <ChartColumn size={26} style={{ color: 'var(--accent)' }} />
+          </span>
           <p className="mt-3 text-sm font-medium">Statistika stiže sa prvim troškovima</p>
           <p className="mt-1 text-xs" style={{ color: 'var(--ink-3)' }}>
             Dodaj unos pomoću + dugmeta

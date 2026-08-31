@@ -51,15 +51,43 @@ db.version(1).stores({
   expenses: '++id, date, categoryId',
 })
 
+// v2: stock emoji icons became monochrome glyph keys (custom emojis stay as-is)
+const EMOJI_TO_GLYPH: Record<string, string> = {
+  '🛒': 'shopping-cart',
+  '☕': 'coffee',
+  '🚌': 'bus',
+  '💡': 'lightbulb',
+  '🏠': 'house',
+  '💊': 'pill',
+  '👕': 'shirt',
+  '📦': 'package',
+  '🏷️': 'tag',
+}
+
+db.version(2)
+  .stores({
+    categories: '++id, order',
+    expenses: '++id, date, categoryId',
+  })
+  .upgrade(async (tx) => {
+    await tx
+      .table('categories')
+      .toCollection()
+      .modify((c: Category) => {
+        const glyph = EMOJI_TO_GLYPH[c.icon]
+        if (glyph) c.icon = glyph
+      })
+  })
+
 export const DEFAULT_CATEGORIES: Omit<Category, 'id'>[] = [
-  { name: 'Hrana', icon: '🛒', color: 'orange', order: 0 },
-  { name: 'Kafa i izlasci', icon: '☕', color: 'yellow', order: 1 },
-  { name: 'Prevoz', icon: '🚌', color: 'green', order: 2 },
-  { name: 'Računi', icon: '💡', color: 'blue', order: 3 },
-  { name: 'Stan', icon: '🏠', color: 'violet', order: 4 },
-  { name: 'Zdravlje', icon: '💊', color: 'aqua', order: 5 },
-  { name: 'Odeća', icon: '👕', color: 'magenta', order: 6 },
-  { name: 'Ostalo', icon: '📦', color: 'gray', order: 7 },
+  { name: 'Hrana', icon: 'shopping-cart', color: 'orange', order: 0 },
+  { name: 'Kafa i izlasci', icon: 'coffee', color: 'yellow', order: 1 },
+  { name: 'Prevoz', icon: 'bus', color: 'green', order: 2 },
+  { name: 'Računi', icon: 'lightbulb', color: 'blue', order: 3 },
+  { name: 'Stan', icon: 'house', color: 'violet', order: 4 },
+  { name: 'Zdravlje', icon: 'pill', color: 'aqua', order: 5 },
+  { name: 'Odeća', icon: 'shirt', color: 'magenta', order: 6 },
+  { name: 'Ostalo', icon: 'package', color: 'gray', order: 7 },
 ]
 
 db.on('populate', (tx) => {

@@ -1,20 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { catColor, COLOR_SLOTS, db, type Category, type ColorSlot } from '../db'
+import { GLYPH_KEYS } from '../lib/glyphs'
 import FullPage from './FullPage'
 import Confirm from './Confirm'
-
-/** Curated emoji picker — no typing/keyboard-switching needed to pick a category icon. */
-const EMOJIS = [
-  '🛒', '🍔', '🍕', '🥡', '☕', '🍺', '🍷', '🎂',
-  '🚌', '🚕', '⛽', '🚗', '🚲', '✈️', '🏖️', '🎫',
-  '🏠', '💡', '💧', '🔥', '📶', '🛠️', '🧾', '📦',
-  '💊', '🏥', '🦷', '🏋️', '⚽', '🎾', '💆', '💈',
-  '👕', '👟', '👗', '💄', '🕶️', '💍', '🧴', '🧺',
-  '🎁', '🎮', '🎬', '🎵', '📚', '🎓', '🎨', '🎰',
-  '📱', '💻', '🎧', '⌚', '🖨️', '🪫', '🧸', '👶',
-  '🐶', '🐱', '🪴', '❤️', '💸', '🏦', '💳', '⭐',
-]
+import CategoryIcon from './CategoryIcon'
 
 export default function CategoryEditor({
   open,
@@ -28,7 +18,7 @@ export default function CategoryEditor({
   onDone: (msg: string) => void
 }) {
   const [name, setName] = useState('')
-  const [icon, setIcon] = useState('🏷️')
+  const [icon, setIcon] = useState('tag')
   const [color, setColor] = useState<ColorSlot>('blue')
   const [budgetStr, setBudgetStr] = useState('')
   const [askDelete, setAskDelete] = useState(false)
@@ -51,7 +41,7 @@ export default function CategoryEditor({
       setBudgetStr(category.budget ? String(category.budget) : '')
     } else {
       setName('')
-      setIcon('🏷️')
+      setIcon('tag')
       setColor('blue')
       setBudgetStr('')
     }
@@ -64,7 +54,7 @@ export default function CategoryEditor({
     const budget = parseInt(budgetStr || '0', 10)
     const data = {
       name: trimmed,
-      icon,
+      icon: icon || 'tag',
       color,
       budget: budget > 0 ? budget : undefined,
     }
@@ -103,10 +93,10 @@ export default function CategoryEditor({
         {/* name + live preview of the chosen icon/color */}
         <div className="card mt-4 flex items-center gap-3 p-4">
           <span
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl"
             style={{ background: `color-mix(in srgb, ${catColor(color)} 18%, transparent)` }}
           >
-            {icon}
+            <CategoryIcon icon={icon} size={24} color={catColor(color)} />
           </span>
           <input
             value={name}
@@ -124,24 +114,28 @@ export default function CategoryEditor({
             Ikonica
           </h2>
           <div className="mt-3 grid grid-cols-8 gap-1.5">
-            {EMOJIS.map((e) => {
-              const selected = e === icon
+            {GLYPH_KEYS.map((k) => {
+              const selected = k === icon
               return (
                 <button
-                  key={e}
-                  onClick={() => setIcon(e)}
-                  aria-label={`Ikonica ${e}`}
-                  className="press flex h-10 items-center justify-center rounded-xl text-xl"
+                  key={k}
+                  onClick={() => setIcon(k)}
+                  aria-label={`Ikonica ${k}`}
+                  className="press flex h-10 items-center justify-center rounded-xl"
                   style={
                     selected
                       ? {
-                          background: 'color-mix(in srgb, var(--accent) 20%, transparent)',
-                          boxShadow: 'inset 0 0 0 1.5px var(--accent)',
+                          background: `color-mix(in srgb, ${catColor(color)} 18%, transparent)`,
+                          boxShadow: `inset 0 0 0 1.5px ${catColor(color)}`,
                         }
                       : { background: 'color-mix(in srgb, var(--ink) 4%, transparent)' }
                   }
                 >
-                  {e}
+                  <CategoryIcon
+                    icon={k}
+                    size={19}
+                    color={selected ? catColor(color) : 'var(--ink-2)'}
+                  />
                 </button>
               )
             })}
