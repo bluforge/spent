@@ -19,7 +19,7 @@ import { exportCSV, exportJSON, importJSON } from '../lib/backup'
 import { updateSettings, useSettings, type ThemePref } from '../lib/settings'
 import CategoryEditor from '../components/CategoryEditor'
 import Confirm from '../components/Confirm'
-import Sheet from '../components/Sheet'
+import FullPage from '../components/FullPage'
 
 function IconChip({ color, children }: { color: string; children: ReactNode }) {
   return (
@@ -248,34 +248,35 @@ export default function More({ showToast }: { showToast: (m: string) => void }) 
         </div>
       </section>
 
-      {/* monthly budget sheet */}
-      <Sheet open={budgetOpen} onClose={() => setBudgetOpen(false)} title="Mesečni budžet">
-        <p className="text-sm" style={{ color: 'var(--ink-2)' }}>
+      {/* monthly budget page */}
+      <FullPage
+        open={budgetOpen}
+        title="Mesečni budžet"
+        onClose={() => setBudgetOpen(false)}
+        onSave={saveBudget}
+      >
+        <p className="mt-3 text-sm" style={{ color: 'var(--ink-2)' }}>
           Ukupan limit za mesec — napredak se prikazuje na Pregledu.
         </p>
-        <div className="relative mt-3">
+        <div className="card relative mt-4 p-4">
           <input
             value={budgetStr}
             onChange={(e) => setBudgetStr(e.target.value.replace(/\D/g, '').slice(0, 9))}
             inputMode="numeric"
+            pattern="[0-9]*"
             placeholder="npr. 60000"
-            className="w-full rounded-2xl px-4 py-3.5 pr-12 text-lg font-semibold outline-none"
+            enterKeyHint="done"
+            onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
+            className="w-full rounded-2xl px-4 py-3 pr-12 text-lg font-semibold outline-none"
             style={{ background: 'color-mix(in srgb, var(--ink) 5%, transparent)' }}
           />
           <span
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-sm"
+            className="absolute right-8 top-1/2 -translate-y-1/2 text-sm"
             style={{ color: 'var(--ink-3)' }}
           >
             din
           </span>
         </div>
-        <button
-          onClick={saveBudget}
-          className="press mt-4 w-full rounded-full py-3 text-sm font-semibold"
-          style={{ background: 'var(--accent)', color: 'var(--on-accent)' }}
-        >
-          Sačuvaj
-        </button>
         {settings.monthlyBudget != null && (
           <button
             onClick={() => {
@@ -283,13 +284,13 @@ export default function More({ showToast }: { showToast: (m: string) => void }) 
               showToast('Budžet uklonjen')
               setBudgetOpen(false)
             }}
-            className="press mt-2 w-full rounded-full py-3 text-sm font-semibold"
+            className="press mt-4 w-full rounded-full py-3 text-sm font-semibold"
             style={{ color: 'var(--danger)' }}
           >
             Ukloni budžet
           </button>
         )}
-      </Sheet>
+      </FullPage>
 
       <Confirm
         open={pendingImport != null}

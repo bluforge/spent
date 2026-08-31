@@ -3,7 +3,7 @@ import type { Expense } from './db'
 import { currentMonth, type Month } from './lib/format'
 import TabBar, { type Tab } from './components/TabBar'
 import Toast from './components/Toast'
-import EntrySheet from './components/EntrySheet'
+import EntryPage from './components/EntryPage'
 import Home from './screens/Home'
 import History from './screens/History'
 import Stats from './screens/Stats'
@@ -48,7 +48,7 @@ export default function App() {
       {tab === 'more' && <More showToast={showToast} />}
 
       <TabBar tab={tab} onTab={setTab} onAdd={openNew} />
-      <EntrySheet
+      <EntryPage
         open={entryOpen}
         editing={editing}
         onClose={() => setEntryOpen(false)}

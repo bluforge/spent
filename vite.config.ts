@@ -19,8 +19,8 @@ export default defineConfig(({ command }) => ({
         lang: 'sr',
         display: 'standalone',
         orientation: 'portrait',
-        theme_color: '#0a0d13',
-        background_color: '#0a0d13',
+        theme_color: '#000000',
+        background_color: '#000000',
         icons: [
           { src: 'favicon.svg', sizes: 'any', type: 'image/svg+xml' },
           { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' },

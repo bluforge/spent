@@ -64,5 +64,5 @@ export function applyTheme(pref: ThemePref) {
   document.documentElement.dataset.theme = mode
   document
     .querySelector('meta[name="theme-color"]')
-    ?.setAttribute('content', mode === 'light' ? '#f2f4f8' : '#0a0d13')
+    ?.setAttribute('content', mode === 'light' ? '#f4f4f6' : '#000000')
 }
