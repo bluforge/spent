@@ -1,0 +1,207 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-line: var(--line);
+  --color-grid: var(--grid);
+  --color-danger: var(--danger);
+  --color-good: var(--good);
+  --color-warn: var(--warn);
+}
+
+:root {
+  color-scheme: dark;
+  --bg: #0a0d13;
+  --surface: #131826;
+  --surface-2: #1a2133;
+  --ink: #f2f5fb;
+  --ink-2: #98a2b8;
+  --ink-3: #66718a;
+  --accent: #34d399;
+  --on-accent: #05281c;
+  --line: rgba(255, 255, 255, 0.08);
+  --grid: rgba(255, 255, 255, 0.07);
+  --glass: rgba(19, 25, 40, 0.66);
+  --glass-strong: rgba(15, 20, 33, 0.82);
+  --danger: #e05e5e;
+  --good: #2fb344;
+  --warn: #fab219;
+  --shadow-glass: 0 12px 40px rgba(0, 0, 0, 0.45);
+  --cat-blue: #3987e5;
+  --cat-orange: #d95926;
+  --cat-aqua: #199e70;
+  --cat-yellow: #c98500;
+  --cat-magenta: #d55181;
+  --cat-green: #008300;
+  --cat-violet: #9085e9;
+  --cat-red: #e66767;
+  --cat-gray: #898781;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f2f4f8;
+  --surface: #ffffff;
+  --surface-2: #f4f6fa;
+  --ink: #0e1320;
+  --ink-2: #4c5670;
+  --ink-3: #8791a6;
+  --accent: #0e8a60;
+  --on-accent: #ffffff;
+  --line: rgba(14, 19, 32, 0.08);
+  --grid: rgba(14, 19, 32, 0.07);
+  --glass: rgba(255, 255, 255, 0.66);
+  --glass-strong: rgba(255, 255, 255, 0.84);
+  --danger: #d03b3b;
+  --good: #067a3c;
+  --warn: #b97a00;
+  --shadow-glass: 0 12px 40px rgba(15, 23, 42, 0.16);
+  --cat-blue: #2a78d6;
+  --cat-orange: #eb6834;
+  --cat-aqua: #1baf7a;
+  --cat-yellow: #eda100;
+  --cat-magenta: #e87ba4;
+  --cat-green: #008300;
+  --cat-violet: #4a3aa7;
+  --cat-red: #e34948;
+  --cat-gray: #898781;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+input,
+button,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* ---------- liquid glass chrome ---------- */
+
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-glass), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.glass-strong {
+  background: var(--glass-strong);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-glass), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+:root[data-theme="light"] .glass,
+:root[data-theme="light"] .glass-strong {
+  box-shadow: var(--shadow-glass), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+}
+
+.hairline-t {
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- motion ---------- */
+
+.press {
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.press:active {
+  transform: scale(0.96);
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.34s cubic-bezier(0.32, 0.72, 0.33, 1);
+}
+.animate-fade-in {
+  animation: fade-in 0.25s ease;
+}
+.animate-pop-in {
+  animation: pop-in 0.28s cubic-bezier(0.32, 0.72, 0.33, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise,
+  .animate-fade-in,
+  .animate-pop-in {
+    animation: none;
+  }
+  .press:active {
+    transform: none;
+  }
+}
+
+/* ---------- misc ---------- */
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
