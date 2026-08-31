@@ -37,6 +37,7 @@ export interface Expense {
   amount: number
   categoryId: number
   date: string // YYYY-MM-DD (local time)
+  tag?: string
   note?: string
   createdAt: number
 }
@@ -99,6 +100,12 @@ db.version(3)
         if (emoji) c.icon = emoji
       })
   })
+
+// v4: optional free-form tag on expenses (indexed for filtering)
+db.version(4).stores({
+  categories: '++id, order',
+  expenses: '++id, date, categoryId, tag',
+})
 
 export const DEFAULT_CATEGORIES: Omit<Category, 'id'>[] = [
   { name: 'Hrana', icon: '🛒', color: 'orange', order: 0 },

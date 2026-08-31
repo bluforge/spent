@@ -27,9 +27,11 @@ export default function EntryPage({
   onDone: (msg: string) => void
 }) {
   const categories = useLiveQuery(() => db.categories.orderBy('order').toArray(), []) ?? []
+  const allExpenses = useLiveQuery(() => db.expenses.toArray(), []) ?? []
   const [digits, setDigits] = useState('')
   const [categoryId, setCategoryId] = useState<number | null>(null)
   const [date, setDate] = useState(todayStr())
+  const [tag, setTag] = useState('')
   const [note, setNote] = useState('')
   const [askDelete, setAskDelete] = useState(false)
   const amountRef = useRef<HTMLInputElement>(null)
@@ -40,9 +42,11 @@ export default function EntryPage({
       setDigits(String(editing.amount))
       setCategoryId(editing.categoryId)
       setDate(editing.date)
+      setTag(editing.tag ?? '')
       setNote(editing.note ?? '')
     } else {
       setDigits('')
+      setTag('')
       setNote('')
       setDate(todayStr())
       const last = Number(localStorage.getItem(LAST_CAT_KEY))
@@ -60,12 +64,33 @@ export default function EntryPage({
   const amount = parseInt(digits || '0', 10)
   const valid = amount > 0 && validCatId != null
 
+  // predlozi oznaka: prvo one koje već idu uz izabranu kategoriju, pa najčešće ukupno
+  const tagSuggestions = useMemo(() => {
+    const stats = new Map<string, { display: string; count: number; catCount: number }>()
+    for (const e of allExpenses) {
+      if (!e.tag) continue
+      const key = e.tag.toLowerCase()
+      let s = stats.get(key)
+      if (!s) {
+        s = { display: e.tag, count: 0, catCount: 0 }
+        stats.set(key, s)
+      }
+      s.count++
+      if (validCatId != null && e.categoryId === validCatId) s.catCount++
+    }
+    return [...stats.values()]
+      .sort((a, b) => b.catCount - a.catCount || b.count - a.count)
+      .slice(0, 8)
+      .map((s) => s.display)
+  }, [allExpenses, validCatId])
+
   const save = async () => {
     if (!valid) return
     const data = {
       amount,
       categoryId: validCatId,
       date,
+      tag: tag.trim() || undefined,
       note: note.trim() || undefined,
     }
     if (editing) {
@@ -223,6 +248,50 @@ export default function EntryPage({
               />
             </label>
           </div>
+        </section>
+
+        {/* tag */}
+        <section className="card mt-3 p-4">
+          <h2 className="text-sm font-medium" style={{ color: 'var(--ink-2)' }}>
+            Oznaka
+          </h2>
+          {tagSuggestions.length > 0 && (
+            <div className="no-scrollbar -mx-4 mt-3 flex gap-2 overflow-x-auto px-4">
+              {tagSuggestions.map((t) => {
+                const active = tag.trim().toLowerCase() === t.toLowerCase()
+                return (
+                  <button
+                    key={t}
+                    onClick={() => setTag(active ? '' : t)}
+                    className="press shrink-0 whitespace-nowrap rounded-full px-3.5 py-2 text-[13px] font-medium"
+                    style={
+                      active
+                        ? {
+                            background: 'color-mix(in srgb, var(--accent) 18%, transparent)',
+                            boxShadow: 'inset 0 0 0 1.5px var(--accent)',
+                          }
+                        : {
+                            background: 'color-mix(in srgb, var(--ink) 6%, transparent)',
+                            color: 'var(--ink-2)',
+                          }
+                    }
+                  >
+                    #{t}
+                  </button>
+                )
+              })}
+            </div>
+          )}
+          <input
+            value={tag}
+            onChange={(e) => setTag(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
+            placeholder="npr. gorivo, servis… (opciono)"
+            maxLength={24}
+            enterKeyHint="done"
+            className="mt-3 w-full rounded-2xl px-4 py-3 text-sm outline-none"
+            style={{ background: 'color-mix(in srgb, var(--ink) 5%, transparent)' }}
+          />
         </section>
 
         {/* note */}

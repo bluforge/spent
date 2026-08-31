@@ -30,9 +30,20 @@ export default function ExpenseRow({
       </span>
       <span className="min-w-0 flex-1">
         <span className="block truncate text-[15px] font-medium">{category?.name ?? 'Nepoznato'}</span>
-        {subtitle && (
-          <span className="block truncate text-xs" style={{ color: 'var(--ink-3)' }}>
-            {subtitle}
+        {(subtitle || expense.tag) && (
+          <span className="mt-0.5 flex items-center gap-1.5 text-xs" style={{ color: 'var(--ink-3)' }}>
+            {expense.tag && (
+              <span
+                className="shrink-0 rounded-md px-1.5 py-px text-[11px] font-medium"
+                style={{
+                  background: 'color-mix(in srgb, var(--ink) 8%, transparent)',
+                  color: 'var(--ink-2)',
+                }}
+              >
+                #{expense.tag}
+              </span>
+            )}
+            {subtitle && <span className="truncate">{subtitle}</span>}
           </span>
         )}
       </span>

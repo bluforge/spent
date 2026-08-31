@@ -45,10 +45,16 @@ export async function exportCSV() {
     db.expenses.orderBy('date').toArray(),
   ])
   const catName = new Map(categories.map((c) => [c.id, c.name]))
-  const rows = ['Datum;Iznos;Kategorija;Beleška']
+  const rows = ['Datum;Iznos;Kategorija;Oznaka;Beleška']
   for (const e of expenses) {
     rows.push(
-      [e.date, String(e.amount), csvEscape(catName.get(e.categoryId) ?? ''), csvEscape(e.note ?? '')].join(';'),
+      [
+        e.date,
+        String(e.amount),
+        csvEscape(catName.get(e.categoryId) ?? ''),
+        csvEscape(e.tag ?? ''),
+        csvEscape(e.note ?? ''),
+      ].join(';'),
     )
   }
   // BOM so Excel detects UTF-8 (š, č, ž...)
@@ -100,6 +106,7 @@ export async function importJSON(file: File): Promise<{ categories: number; expe
       amount: Math.round(e.amount),
       categoryId: e.categoryId,
       date: e.date,
+      tag: typeof e.tag === 'string' && e.tag.trim() ? e.tag.trim().slice(0, 24) : undefined,
       note: typeof e.note === 'string' && e.note.trim() ? e.note.trim() : undefined,
       createdAt: typeof e.createdAt === 'number' ? e.createdAt : Date.now(),
     }))

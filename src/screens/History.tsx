@@ -54,6 +54,7 @@ export default function History({
   const expenses = useLiveQuery(() => expensesInMonth(month), [month.year, month.month])
   const [q, setQ] = useState('')
   const [catFilter, setCatFilter] = useState<number | null>(null)
+  const [tagFilter, setTagFilter] = useState<string | null>(null)
 
   const loaded = expenses !== undefined
   const list = expenses ?? []
@@ -63,14 +64,29 @@ export default function History({
     const needle = q.trim().toLowerCase()
     return list.filter((e) => {
       if (catFilter != null && e.categoryId !== catFilter) return false
+      if (tagFilter != null && (e.tag?.toLowerCase() ?? '') !== tagFilter.toLowerCase()) return false
       if (!needle) return true
       const c = catById.get(e.categoryId)
       return (
         (e.note?.toLowerCase().includes(needle) ?? false) ||
+        (e.tag?.toLowerCase().includes(needle) ?? false) ||
         (c?.name.toLowerCase().includes(needle) ?? false)
       )
     })
-  }, [list, q, catFilter, catById])
+  }, [list, q, catFilter, tagFilter, catById])
+
+  // oznake prisutne u ovom mesecu, najčešće prve
+  const monthTags = useMemo(() => {
+    const stats = new Map<string, { display: string; count: number }>()
+    for (const e of list) {
+      if (!e.tag) continue
+      const key = e.tag.toLowerCase()
+      const s = stats.get(key)
+      if (s) s.count++
+      else stats.set(key, { display: e.tag, count: 1 })
+    }
+    return [...stats.values()].sort((a, b) => b.count - a.count).slice(0, 10)
+  }, [list])
 
   const groups = groupByDay(filtered)
   const total = totalOf(filtered)
@@ -118,6 +134,22 @@ export default function History({
           </Chip>
         ))}
       </div>
+
+      {monthTags.length > 0 && (
+        <div className="no-scrollbar -mx-5 mt-2 flex gap-2 overflow-x-auto px-5">
+          {monthTags.map(({ display }) => (
+            <Chip
+              key={display.toLowerCase()}
+              active={tagFilter?.toLowerCase() === display.toLowerCase()}
+              onClick={() =>
+                setTagFilter(tagFilter?.toLowerCase() === display.toLowerCase() ? null : display)
+              }
+            >
+              #{display}
+            </Chip>
+          ))}
+        </div>
+      )}
 
       {loaded && list.length === 0 && (
         <section className="card mt-4 flex flex-col items-center px-5 py-12 text-center">
