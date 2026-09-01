@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { ChartColumn } from 'lucide-react'
 import { db } from '../db'
@@ -34,6 +35,7 @@ function Tile({ label, value, sub }: { label: string; value: string; sub?: strin
 const pad2 = (n: number) => String(n).padStart(2, '0')
 
 export default function Stats() {
+  const [selTag, setSelTag] = useState<string | null>(null)
   const now = currentMonth()
   const sixStart = monthRange(addMonths(now, -5)).start
   const yearStart = `${now.year}-01-01`
@@ -81,6 +83,32 @@ export default function Stats() {
 
   const topCats = sumByCategory(six, categories).slice(0, 5)
   const maxTop = topCats[0]?.total ?? 0
+
+  const tagMap = new Map<string, { display: string; total: number }>()
+  for (const e of six) {
+    if (!e.tag) continue
+    const k = e.tag.toLowerCase()
+    const s = tagMap.get(k)
+    if (s) s.total += e.amount
+    else tagMap.set(k, { display: e.tag, total: e.amount })
+  }
+  const topTags = [...tagMap.entries()]
+    .map(([key, v]) => ({ key, ...v }))
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 6)
+  const maxTag = topTags[0]?.total ?? 0
+
+  const selTrend: TrendPoint[] | null = selTag
+    ? Array.from({ length: 6 }, (_, i) => {
+        const m = addMonths(now, i - 5)
+        const k = `${m.year}-${pad2(m.month + 1)}`
+        let total = 0
+        for (const e of six) {
+          if (e.tag?.toLowerCase() === selTag && e.date.slice(0, 7) === k) total += e.amount
+        }
+        return { label: MONTHS_SHORT[m.month], name: MONTHS_NOM[m.month], total, current: i === 5 }
+      })
+    : null
 
   const empty = six.length === 0 && yearList.length === 0
 
@@ -134,6 +162,65 @@ export default function Stats() {
                   <CatBarRow key={s.category.id} category={s.category} total={s.total} max={maxTop} />
                 ))}
               </div>
+            </section>
+          )}
+
+          {topTags.length > 0 && (
+            <section className="card mt-3 p-5">
+              <div className="flex items-baseline justify-between">
+                <h2 className="text-base font-semibold">Oznake (6 mes.)</h2>
+                <span className="text-xs" style={{ color: 'var(--ink-3)' }}>
+                  tapni za trend
+                </span>
+              </div>
+              <div className="mt-3.5 space-y-3.5">
+                {topTags.map((t) => {
+                  const active = selTag === t.key
+                  return (
+                    <button
+                      key={t.key}
+                      onClick={() => setSelTag(active ? null : t.key)}
+                      className="press block w-full text-left"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <span
+                          className="min-w-0 flex-1 truncate text-[15px] font-medium"
+                          style={active ? { color: 'var(--accent)' } : undefined}
+                        >
+                          #{t.display}
+                        </span>
+                        <span className="tnum shrink-0 text-[15px] font-semibold">
+                          {fmtDin(t.total)}
+                        </span>
+                      </div>
+                      <div
+                        className="mt-1.5 h-2 overflow-hidden rounded-full"
+                        style={{ background: 'color-mix(in srgb, var(--ink) 6%, transparent)' }}
+                      >
+                        <div
+                          className="h-full rounded-r-full transition-[width] duration-500"
+                          style={{
+                            width: `${Math.max(2, (t.total / maxTag) * 100)}%`,
+                            background: active
+                              ? 'var(--accent)'
+                              : 'color-mix(in srgb, var(--accent) 45%, transparent)',
+                          }}
+                        />
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+              {selTrend && (
+                <div className="hairline-t mt-4 pt-4">
+                  <div className="text-sm font-medium" style={{ color: 'var(--ink-2)' }}>
+                    #{topTags.find((t) => t.key === selTag)?.display} po mesecima
+                  </div>
+                  <div className="mt-4">
+                    <TrendColumns data={selTrend} />
+                  </div>
+                </div>
+              )}
             </section>
           )}
         </>
