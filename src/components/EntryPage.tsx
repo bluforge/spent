@@ -64,22 +64,20 @@ export default function EntryPage({
   const amount = parseInt(digits || '0', 10)
   const valid = amount > 0 && validCatId != null
 
-  // predlozi oznaka: prvo one koje već idu uz izabranu kategoriju, pa najčešće ukupno
+  // predlozi oznaka su vezani za izabranu kategoriju: nude se samo one koje su
+  // već korišćene uz nju (za sve ostalo služi slobodan unos ispod)
   const tagSuggestions = useMemo(() => {
-    const stats = new Map<string, { display: string; count: number; catCount: number }>()
+    if (validCatId == null) return []
+    const stats = new Map<string, { display: string; count: number }>()
     for (const e of allExpenses) {
-      if (!e.tag) continue
+      if (!e.tag || e.categoryId !== validCatId) continue
       const key = e.tag.toLowerCase()
-      let s = stats.get(key)
-      if (!s) {
-        s = { display: e.tag, count: 0, catCount: 0 }
-        stats.set(key, s)
-      }
-      s.count++
-      if (validCatId != null && e.categoryId === validCatId) s.catCount++
+      const s = stats.get(key)
+      if (s) s.count++
+      else stats.set(key, { display: e.tag, count: 1 })
     }
     return [...stats.values()]
-      .sort((a, b) => b.catCount - a.catCount || b.count - a.count)
+      .sort((a, b) => b.count - a.count)
       .slice(0, 8)
       .map((s) => s.display)
   }, [allExpenses, validCatId])
