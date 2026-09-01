@@ -46,35 +46,6 @@
   --cat-gray: #898781;
 }
 
-:root[data-theme="light"] {
-  color-scheme: light;
-  --bg: #f4f4f6;
-  --surface: #ffffff;
-  --surface-2: #f2f2f4;
-  --ink: #101014;
-  --ink-2: #55555e;
-  --ink-3: #8b8b94;
-  --accent: #6b8500;
-  --on-accent: #ffffff;
-  --line: rgba(16, 16, 20, 0.08);
-  --grid: rgba(16, 16, 20, 0.07);
-  --glass: rgba(255, 255, 255, 0.55);
-  --glass-strong: rgba(255, 255, 255, 0.86);
-  --danger: #d03b3b;
-  --good: #5a7900;
-  --warn: #c77700;
-  --shadow-glass: 0 12px 40px rgba(20, 20, 24, 0.14);
-  --cat-blue: #2a78d6;
-  --cat-orange: #eb6834;
-  --cat-aqua: #1baf7a;
-  --cat-yellow: #eda100;
-  --cat-magenta: #e87ba4;
-  --cat-green: #008300;
-  --cat-violet: #4a3aa7;
-  --cat-red: #e34948;
-  --cat-gray: #898781;
-}
-
 html,
 body {
   height: 100%;
@@ -117,11 +88,6 @@ textarea {
   -webkit-backdrop-filter: blur(28px) saturate(180%);
   border: 1px solid var(--line);
   box-shadow: var(--shadow-glass), inset 0 1px 0 rgba(255, 255, 255, 0.07);
-}
-
-:root[data-theme="light"] .glass,
-:root[data-theme="light"] .glass-strong {
-  box-shadow: var(--shadow-glass), inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
 /* liquid-glass pill (tab bar): stronger refraction, rim light, top gloss */

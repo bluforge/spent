@@ -4,19 +4,16 @@ import {
   ChevronRight,
   Download,
   FileSpreadsheet,
-  Moon,
-  MonitorSmartphone,
   Pencil,
   Plus,
   ShieldCheck,
-  Sun,
   Upload,
   Wallet,
 } from 'lucide-react'
 import { catColor, db, type Category } from '../db'
 import { fmtDin, fmtNum } from '../lib/format'
 import { exportCSV, exportJSON, importJSON } from '../lib/backup'
-import { updateSettings, useSettings, type ThemePref } from '../lib/settings'
+import { updateSettings, useSettings } from '../lib/settings'
 import CategoryEditor from '../components/CategoryEditor'
 import CategoryIcon from '../components/CategoryIcon'
 import Confirm from '../components/Confirm'
@@ -32,12 +29,6 @@ function IconChip({ color, children }: { color: string; children: ReactNode }) {
     </span>
   )
 }
-
-const THEME_OPTS: { key: ThemePref; label: string; Icon: typeof Moon }[] = [
-  { key: 'dark', label: 'Tamna', Icon: Moon },
-  { key: 'light', label: 'Svetla', Icon: Sun },
-  { key: 'system', label: 'Auto', Icon: MonitorSmartphone },
-]
 
 export default function More({ showToast }: { showToast: (m: string) => void }) {
   const settings = useSettings()
@@ -133,7 +124,7 @@ export default function More({ showToast }: { showToast: (m: string) => void }) 
         </button>
       </section>
 
-      {/* budget & theme */}
+      {/* budget */}
       <section className="card mt-3 px-5 py-2">
         <button onClick={openBudget} className="press flex w-full items-center gap-3 py-3 text-left">
           <IconChip color="var(--accent)">
@@ -147,36 +138,6 @@ export default function More({ showToast }: { showToast: (m: string) => void }) 
           </span>
           <ChevronRight size={16} style={{ color: 'var(--ink-3)' }} />
         </button>
-        <div className="hairline-t py-3">
-          <div className="flex items-center gap-3">
-            <IconChip color="var(--cat-violet)">
-              <Moon size={17} />
-            </IconChip>
-            <span className="text-sm font-medium">Tema</span>
-          </div>
-          <div
-            className="mt-2.5 flex rounded-full p-1"
-            style={{ background: 'color-mix(in srgb, var(--ink) 6%, transparent)' }}
-          >
-            {THEME_OPTS.map(({ key, label, Icon }) => {
-              const active = settings.theme === key
-              return (
-                <button
-                  key={key}
-                  onClick={() => updateSettings({ theme: key })}
-                  className="press flex flex-1 items-center justify-center gap-1.5 rounded-full py-2 text-[13px] font-medium"
-                  style={
-                    active
-                      ? { background: 'var(--surface)', boxShadow: '0 2px 8px rgba(0,0,0,0.18)' }
-                      : { color: 'var(--ink-2)' }
-                  }
-                >
-                  <Icon size={14} /> {label}
-                </button>
-              )
-            })}
-          </div>
-        </div>
       </section>
 
       {/* data */}

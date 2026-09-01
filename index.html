@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="sr" data-theme="dark">
+<html lang="sr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -11,20 +11,6 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>Spent</title>
-    <script>
-      try {
-        var pref = localStorage.getItem('spent-theme') || 'dark'
-        var mode =
-          pref === 'system'
-            ? matchMedia('(prefers-color-scheme: light)').matches
-              ? 'light'
-              : 'dark'
-            : pref
-        document.documentElement.dataset.theme = mode
-        var meta = document.querySelector('meta[name="theme-color"]')
-        if (meta) meta.setAttribute('content', mode === 'light' ? '#f4f4f6' : '#000000')
-      } catch (e) {}
-    </script>
   </head>
   <body>
     <div id="root"></div>
