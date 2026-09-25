@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import type { Expense } from './db'
+import type { Category, Expense } from './db'
 import { currentMonth, type Month } from './lib/format'
 import TabBar, { type Tab } from './components/TabBar'
 import Toast from './components/Toast'
 import EntryPage from './components/EntryPage'
+import CategoryPage from './components/CategoryPage'
 import Home from './screens/Home'
 import History from './screens/History'
 import Stats from './screens/Stats'
@@ -14,6 +15,7 @@ export default function App() {
   const [month, setMonth] = useState<Month>(currentMonth())
   const [entryOpen, setEntryOpen] = useState(false)
   const [editing, setEditing] = useState<Expense | undefined>()
+  const [catView, setCatView] = useState<{ category: Category; month: Month } | null>(null)
   const [toast, setToast] = useState('')
   const toastTimer = useRef<number | undefined>(undefined)
 
@@ -58,16 +60,33 @@ export default function App() {
     setEntryOpen(true)
   }
 
+  const openCategory = (category: Category, m: Month) => setCatView({ category, month: m })
+
   return (
     <div className="mx-auto min-h-dvh w-full max-w-md px-5 pb-[calc(env(safe-area-inset-bottom)+112px)] pt-[calc(env(safe-area-inset-top)+20px)]">
       {tab === 'home' && (
-        <Home month={month} onMonth={setMonth} onEdit={openEdit} onSeeAll={() => setTab('history')} />
+        <Home
+          month={month}
+          onMonth={setMonth}
+          onEdit={openEdit}
+          onSeeAll={() => setTab('history')}
+          onCategory={openCategory}
+        />
       )}
       {tab === 'history' && <History month={month} onMonth={setMonth} onEdit={openEdit} />}
-      {tab === 'stats' && <Stats />}
+      {tab === 'stats' && <Stats onCategory={openCategory} />}
       {tab === 'more' && <More showToast={showToast} />}
 
       <TabBar tab={tab} onTab={setTab} onAdd={openNew} />
+      {/* before EntryPage, so editing an expense from here opens on top */}
+      {catView && (
+        <CategoryPage
+          category={catView.category}
+          initialMonth={catView.month}
+          onClose={() => setCatView(null)}
+          onEdit={openEdit}
+        />
+      )}
       <EntryPage
         open={entryOpen}
         editing={editing}

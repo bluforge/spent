@@ -1,5 +1,9 @@
-import { useEffect, type ReactNode } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 import { Check, X } from 'lucide-react'
+
+// Open pages, topmost last. Pages can stack (category page → expense editor),
+// so Escape closes only the top one and the body stays locked until the last closes.
+const openPages: object[] = []
 
 /**
  * Full-screen modal page (Fitness-style "Add Workout"): X to close top-left,
@@ -15,25 +19,34 @@ export default function FullPage({
   children,
 }: {
   open: boolean
-  title: string
+  title: ReactNode
   onClose: () => void
   onSave?: () => void
   saveDisabled?: boolean
   headerRight?: ReactNode
   children: ReactNode
 }) {
+  // latest onClose without re-running the effect below, which would reorder the stack
+  const closeRef = useRef(onClose)
+  useEffect(() => {
+    closeRef.current = onClose
+  })
+
   useEffect(() => {
     if (!open) return
+    const self = {}
+    openPages.push(self)
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape' && openPages[openPages.length - 1] === self) closeRef.current()
     }
     window.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
     return () => {
       window.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
+      openPages.splice(openPages.indexOf(self), 1)
+      if (openPages.length === 0) document.body.style.overflow = ''
     }
-  }, [open, onClose])
+  }, [open])
 
   if (!open) return null
 

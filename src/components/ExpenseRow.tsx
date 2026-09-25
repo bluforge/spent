@@ -6,14 +6,18 @@ export default function ExpenseRow({
   expense,
   category,
   showDay,
+  noteAsTitle,
   onClick,
 }: {
   expense: Expense
   category?: Category
   showDay?: boolean
+  noteAsTitle?: boolean // list is already one category — lead with the note instead
   onClick: () => void
 }) {
-  const subtitle = expense.note ?? (showDay ? dayLabel(expense.date) : undefined)
+  const title = (noteAsTitle ? expense.note : undefined) ?? category?.name ?? 'Nepoznato'
+  const subtitle =
+    (noteAsTitle ? undefined : expense.note) ?? (showDay ? dayLabel(expense.date) : undefined)
   return (
     <button onClick={onClick} className="press flex w-full items-center gap-3 py-2.5 text-left">
       <span
@@ -29,7 +33,7 @@ export default function ExpenseRow({
         />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[15px] font-medium">{category?.name ?? 'Nepoznato'}</span>
+        <span className="block truncate text-[15px] font-medium">{title}</span>
         {(subtitle || expense.tag) && (
           <span className="mt-0.5 flex items-center gap-1.5 text-xs" style={{ color: 'var(--ink-3)' }}>
             {expense.tag && (

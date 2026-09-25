@@ -27,12 +27,14 @@ export function sumByCategory(expenses: Expense[], categories: Category[]): CatS
 
 export const totalOf = (expenses: Expense[]) => expenses.reduce((s, e) => s + e.amount, 0)
 
+/** Sort comparator: newest day first; within a day newest entry first. */
+export const newestFirst = (a: Expense, b: Expense) =>
+  a.date === b.date ? b.createdAt - a.createdAt : a.date < b.date ? 1 : -1
+
 /** Grouped by day, newest day first; within a day newest entry first. */
 export function groupByDay(expenses: Expense[]): [string, Expense[]][] {
   const map = new Map<string, Expense[]>()
-  const sorted = [...expenses].sort((a, b) =>
-    a.date === b.date ? b.createdAt - a.createdAt : a.date < b.date ? 1 : -1,
-  )
+  const sorted = [...expenses].sort(newestFirst)
   for (const e of sorted) {
     let arr = map.get(e.date)
     if (!arr) {

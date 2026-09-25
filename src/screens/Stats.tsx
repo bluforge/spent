@@ -1,16 +1,19 @@
 import { useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { ChartColumn } from 'lucide-react'
-import { db } from '../db'
+import { db, type Category } from '../db'
 import {
   addMonths,
   currentMonth,
   dayLabel,
   fmtDin,
+  monthOf,
   monthRange,
   MONTHS_LOC,
   MONTHS_NOM,
   MONTHS_SHORT,
+  todayStr,
+  type Month,
 } from '../lib/format'
 import { sumByCategory } from '../lib/queries'
 import CatBarRow from '../components/CatBarRow'
@@ -34,7 +37,7 @@ function Tile({ label, value, sub }: { label: string; value: string; sub?: strin
 
 const pad2 = (n: number) => String(n).padStart(2, '0')
 
-export default function Stats() {
+export default function Stats({ onCategory }: { onCategory: (c: Category, m: Month) => void }) {
   const [selTag, setSelTag] = useState<string | null>(null)
   const now = currentMonth()
   const sixStart = monthRange(addMonths(now, -5)).start
@@ -83,6 +86,16 @@ export default function Stats() {
 
   const topCats = sumByCategory(six, categories).slice(0, 5)
   const maxTop = topCats[0]?.total ?? 0
+
+  // a category opens at its latest month with spending, not on an empty current month
+  const today = todayStr()
+  const latestMonth = (categoryId: number) => {
+    let last = ''
+    for (const e of six) {
+      if (e.categoryId === categoryId && e.date <= today && e.date > last) last = e.date
+    }
+    return last ? monthOf(last) : now
+  }
 
   const tagMap = new Map<string, { display: string; total: number }>()
   for (const e of six) {
@@ -159,7 +172,13 @@ export default function Stats() {
               <h2 className="text-base font-semibold">Top kategorije (6 mes.)</h2>
               <div className="mt-3.5 space-y-4">
                 {topCats.map((s) => (
-                  <CatBarRow key={s.category.id} category={s.category} total={s.total} max={maxTop} />
+                  <CatBarRow
+                    key={s.category.id}
+                    category={s.category}
+                    total={s.total}
+                    max={maxTop}
+                    onClick={() => onCategory(s.category, latestMonth(s.category.id))}
+                  />
                 ))}
               </div>
             </section>

@@ -92,6 +92,12 @@ export const addMonths = ({ year, month }: Month, delta: number): Month => {
 
 export const sameMonth = (a: Month, b: Month) => a.year === b.year && a.month === b.month
 
+/** "2026-08-29" -> the month it falls in */
+export const monthOf = (ymd: string): Month => {
+  const [y, m] = ymd.split('-').map(Number)
+  return { year: y, month: m - 1 }
+}
+
 export const monthLabel = (m: Month) => {
   const now = currentMonth()
   return m.year === now.year ? MONTHS_NOM[m.month] : `${MONTHS_NOM[m.month]} ${m.year}.`

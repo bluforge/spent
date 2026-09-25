@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { Leaf, TrendingDown, TrendingUp, TriangleAlert } from 'lucide-react'
+import { ChevronRight, Leaf, TrendingDown, TrendingUp, TriangleAlert } from 'lucide-react'
 import CategoryIcon from '../components/CategoryIcon'
-import { catColor, db, type Expense } from '../db'
+import { catColor, db, type Category, type Expense } from '../db'
 import {
   addMonths,
   currentMonth,
@@ -13,7 +13,7 @@ import {
   sameMonth,
   type Month,
 } from '../lib/format'
-import { expensesInMonth, sumByCategory, totalOf } from '../lib/queries'
+import { expensesInMonth, newestFirst, sumByCategory, totalOf } from '../lib/queries'
 import { useSettings } from '../lib/settings'
 import CatBarRow from '../components/CatBarRow'
 import ExpenseRow from '../components/ExpenseRow'
@@ -25,11 +25,13 @@ export default function Home({
   onMonth,
   onEdit,
   onSeeAll,
+  onCategory,
 }: {
   month: Month
   onMonth: (m: Month) => void
   onEdit: (e: Expense) => void
   onSeeAll: () => void
+  onCategory: (c: Category, m: Month) => void
 }) {
   const settings = useSettings()
   const categories = useLiveQuery(() => db.categories.toArray(), []) ?? []
@@ -53,9 +55,7 @@ export default function Home({
   const diff = total - prevTotal
   const showDelta = prevTotal > 0 && list.length > 0 && diff !== 0
 
-  const recent = [...list]
-    .sort((a, b) => (a.date === b.date ? b.createdAt - a.createdAt : a.date < b.date ? 1 : -1))
-    .slice(0, 4)
+  const recent = [...list].sort(newestFirst).slice(0, 4)
 
   const budget = settings.monthlyBudget
   const spentBy = new Map(sums.map((s) => [s.category.id, s.total]))
@@ -155,7 +155,13 @@ export default function Home({
           <h2 className="text-base font-semibold">Po kategorijama</h2>
           <div className="mt-3.5 space-y-4">
             {sums.map((s) => (
-              <CatBarRow key={s.category.id} category={s.category} total={s.total} max={maxCat} />
+              <CatBarRow
+                key={s.category.id}
+                category={s.category}
+                total={s.total}
+                max={maxCat}
+                onClick={() => onCategory(s.category, month)}
+              />
             ))}
           </div>
         </section>
@@ -169,29 +175,36 @@ export default function Home({
             {catBudgets.map(({ c, spent }) => {
               const over = spent > (c.budget ?? 0)
               return (
-                <div key={c.id}>
-                  <div className="flex items-center gap-2.5">
-                    <span
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
-                      style={{
-                        background: `color-mix(in srgb, ${catColor(c.color)} 16%, transparent)`,
-                      }}
-                    >
-                      <CategoryIcon icon={c.icon} size={20} color={catColor(c.color)} />
+                <button
+                  key={c.id}
+                  onClick={() => onCategory(c, month)}
+                  className="press flex w-full items-center gap-2 text-left"
+                >
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-center gap-2.5">
+                      <span
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+                        style={{
+                          background: `color-mix(in srgb, ${catColor(c.color)} 16%, transparent)`,
+                        }}
+                      >
+                        <CategoryIcon icon={c.icon} size={20} color={catColor(c.color)} />
+                      </span>
+                      <span className="min-w-0 flex-1 truncate text-sm font-medium">{c.name}</span>
+                      {over && <TriangleAlert size={14} style={{ color: 'var(--danger)' }} />}
+                      <span
+                        className="tnum shrink-0 text-[13px] font-medium"
+                        style={{ color: over ? 'var(--danger)' : 'var(--ink-2)' }}
+                      >
+                        {fmtNum(spent)} / {fmtNum(c.budget ?? 0)}
+                      </span>
                     </span>
-                    <span className="min-w-0 flex-1 truncate text-sm font-medium">{c.name}</span>
-                    {over && <TriangleAlert size={14} style={{ color: 'var(--danger)' }} />}
-                    <span
-                      className="tnum shrink-0 text-[13px] font-medium"
-                      style={{ color: over ? 'var(--danger)' : 'var(--ink-2)' }}
-                    >
-                      {fmtNum(spent)} / {fmtNum(c.budget ?? 0)}
+                    <span className="ml-[46px] mt-1.5 block">
+                      <Meter value={spent} max={c.budget ?? 0} hue={catColor(c.color)} />
                     </span>
-                  </div>
-                  <div className="ml-[46px] mt-1.5">
-                    <Meter value={spent} max={c.budget ?? 0} hue={catColor(c.color)} />
-                  </div>
-                </div>
+                  </span>
+                  <ChevronRight size={16} className="shrink-0" style={{ color: 'var(--ink-3)' }} />
+                </button>
               )
             })}
           </div>
